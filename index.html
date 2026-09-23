@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b18">
+  <meta name="description" content="A polished browser-based Tic Tac Toe game with classic and custom boards up to 10x10.">
+  <title>Tic Tac Toe</title>
+  <link rel="icon" type="image/png" href="./assets/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <canvas id="game-background" aria-hidden="true"></canvas>
+
+  <main class="app-shell">
+    <section id="start-screen" class="screen start-screen" aria-labelledby="game-title">
+      <div class="brand-mark" aria-hidden="true">
+        <span>X</span><span>O</span>
+      </div>
+      <p class="eyebrow">Classic game, fresh look</p>
+      <h1 id="game-title">Tic Tac Toe</h1>
+      <p class="subtitle">Pick a board and a game mode, then make your move.</p>
+
+      <div class="setup-card glass-panel">
+        <fieldset class="option-group">
+          <legend>Board size</legend>
+          <div class="segmented-control" id="board-size-options">
+            <button class="option-button board-size-option active" type="button" data-size="3" aria-pressed="true">
+              <strong>3 × 3</strong><span>Classic · 3 to win</span>
+            </button>
+            <button class="option-button board-size-option" type="button" data-size="5" aria-pressed="false">
+              <strong>5 × 5</strong><span>Extended · 5 to win</span>
+            </button>
+            <button id="custom-size-option" class="option-button board-size-option custom-size-option" type="button" data-size="6" data-custom="true" aria-pressed="false">
+              <strong>Custom</strong><span>6 × 6 to 10 × 10 · 5 to win</span>
+            </button>
+          </div>
+          <div id="custom-size-control" class="custom-size-control hidden">
+            <div class="custom-size-copy">
+              <span>Custom board size</span>
+              <strong id="custom-size-value">6 × 6</strong>
+            </div>
+            <input id="custom-size-input" type="range" min="6" max="10" value="6" step="1" aria-label="Custom board size">
+            <div class="range-labels" aria-hidden="true"><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="option-group">
+          <legend>Game mode</legend>
+          <div class="segmented-control" id="board-mode-options">
+            <button id="player-vs-computer-btn" class="option-button board-mode-option active" type="button" data-mode="computer" aria-pressed="true">
+              <strong>Vs Computer</strong><span>Play as X</span>
+            </button>
+            <button id="player-vs-player-btn" class="option-button board-mode-option" type="button" data-mode="player" aria-pressed="false">
+              <strong>Two Players</strong><span>Local match</span>
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset id="difficulty-group" class="option-group">
+          <legend>Computer difficulty</legend>
+          <div class="segmented-control difficulty-control" id="difficulty-options">
+            <button class="option-button difficulty-option" type="button" data-difficulty="easy" aria-pressed="false">
+              <strong>Easy</strong><span>Casual · mostly random</span>
+            </button>
+            <button class="option-button difficulty-option active" type="button" data-difficulty="normal" aria-pressed="true">
+              <strong>Normal</strong><span>Balanced · blocks threats</span>
+            </button>
+            <button class="option-button difficulty-option" type="button" data-difficulty="hard" aria-pressed="false">
+              <strong>Hard</strong><span>Strategic · builds combos</span>
+            </button>
+          </div>
+        </fieldset>
+
+        <button id="start-game-btn" class="primary-button" type="button">
+          <span>Start game</span><span aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <p class="keyboard-hint">Tip: use <kbd>R</kbd> to restart a match.</p>
+    </section>
+
+    <section id="game-screen" class="screen game-screen hidden" aria-labelledby="match-title">
+      <header class="game-header glass-panel">
+        <button id="back-btn" class="icon-button" type="button" aria-label="Back to setup">←</button>
+        <div class="game-heading">
+          <p class="eyebrow">Current match</p>
+          <h2 id="match-title">Tic Tac Toe</h2>
+        </div>
+        <button id="restart-btn" class="secondary-button" type="button">Restart</button>
+      </header>
+
+      <div class="game-layout">
+        <aside class="status-card glass-panel">
+          <div class="status-topline">
+            <span class="status-label">Turn</span>
+            <span id="mode-label" class="mode-badge">Vs Computer</span>
+          </div>
+          <div id="turn-indicator" class="turn-indicator x-turn">
+            <span id="turn-symbol" class="turn-symbol">X</span>
+            <div>
+              <strong id="turn-title">Your turn</strong>
+              <p id="turn-subtitle">Choose an empty square.</p>
+            </div>
+          </div>
+          <div class="score-row" aria-label="Match score">
+            <div><span class="score-symbol x-symbol">X</span><strong id="score-x">0</strong></div>
+            <div><span class="score-symbol draw-symbol">Draw</span><strong id="score-draw">0</strong></div>
+            <div><span class="score-symbol o-symbol">O</span><strong id="score-o">0</strong></div>
+          </div>
+        </aside>
+
+        <div class="board-wrap glass-panel">
+          <div id="board" class="board" role="grid" aria-label="Tic Tac Toe board"></div>
+        </div>
+      </div>
+
+      <div id="game-message" class="result-banner hidden" role="status" aria-live="polite">
+        <div>
+          <span id="result-kicker" class="eyebrow">Round over</span>
+          <strong id="result-text">X wins!</strong>
+        </div>
+        <button id="play-again-btn" class="primary-button compact" type="button">Play again</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

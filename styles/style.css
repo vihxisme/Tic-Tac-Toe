@@ -1,0 +1,22 @@
+@import url('./variables.css');
+@import url('./tic-tac-toe.css');
+
+* { box-sizing: border-box; }
+html { color-scheme: dark; }
+body {
+  min-width: 320px; min-height: 100vh; margin: 0; overflow-x: hidden;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(80, 104, 225, .16), transparent 34%),
+    radial-gradient(circle at 82% 78%, rgba(181, 93, 180, .10), transparent 30%),
+    var(--bg);
+  color: var(--text); font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible { outline: 2px solid var(--primary-bright); outline-offset: 3px; }
+#game-background { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.app-shell { position: relative; z-index: 1; display: grid; min-height: 100vh; place-items: center; padding: 32px 18px; }
+.screen { width: min(760px, 100%); animation: screen-in .34s ease both; }
+.hidden { display: none !important; }
+.glass-panel { border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(145deg, rgba(18,27,53,.82), rgba(10,16,34,.72)); box-shadow: var(--shadow); backdrop-filter: blur(20px); }
+@keyframes screen-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
